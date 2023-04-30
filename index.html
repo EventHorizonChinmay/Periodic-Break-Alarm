@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worout/Break</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="body">
+    <div class="container" id="container">
+        <h1> Clock <span id="hourEL"></span> </h1>
+        <div class="time-container" id="time-container"><h1 class="time" id="time"></h1>
+        </div>
+     <hr>
+     <div class="alarm-container" id="alarm-container">
+        <h2 class="alarm" id="alarm"></h2>
+    </div>
+
+    <button class="btn" id="btn" onclick="stopBtn()">Alarm Alert Toggle</button>
+    </div>
+    
+</body>
+<script>
+     var audio = new Audio('Teri Baari (Mary Kom).mp3');    
+    hourElem= document.getElementById("hourEl")
+
+    const hEl= document.getElementById("time") 
+    const alarmEl = document.getElementById("alarm")
+    const containerEl = document.getElementById("container")
+    var i=0
+    const bodyEl = document.getElementById("body")
+    i=0
+    function n(n){
+        return n > 9 ? "" + n: "0" + n;
+    }
+    
+    var min =0
+    var hour =0
+    var secs =0
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+   }
+   alarmEl.style.color = "black";
+   
+    var clock = setInterval(async function (){
+        min = await new Date().getMinutes()
+        hour = await new Date().getHours()
+        secs = await new Date().getSeconds()
+        
+        hEl.innerText  = await hour + ":" + n(min) + ":" + n(secs)
+        breakStartMin = 50
+        breakEndMin = 59
+
+
+        if (i%2 ==0 && min >=00 && min <= breakStartMin){
+            alarmEl.innerText  ="Next break at " + (hour) +":50"+  '\n'+ n(breakStartMin-min)+ ":" + n(60-secs) + " mins left for a break."
+        
+        }
+
+        if (i%2 ==0 && min >= breakStartMin && min <= breakEndMin){
+            remMin = breakEndMin-min
+            remSecs = 60-secs
+            alarmEl.innerText  = n(remMin)+ ":" + n(remSecs) + " mins left : Take a break!!"
+            alarmEl.style.color = 'rgba(0,0255,0,0.99)'
+            alarmEl.style.fontSize = "25px"
+
+            console.log("Audio if started")
+        
+            console.log("Audio supposed to play, i=", i)
+
+            audio.play();
+            audio.volume = 1;
+
+            alarmEl.style.fontSize = "55px"
+            //alert("TAKE A BREAK!!!!")
+        }
+        else{
+            audio.pause()
+            audio.currentTime = 0;
+            alarmEl.style.color = 'rgba(0,0,0,0.99)'
+            alarmEl.style.fontSize = "15px"
+        }
+
+        }
+        ,1000
+    )
+
+    container.style.boxShadow = "10px 20px 20px black"
+    
+
+
+    function stopBtn(){
+        if (min >=breakStartMin && min<=breakEndMin){
+            audio.pause()
+            audio.currentTime = 0;
+            alarmEl.style.color = "blue"
+            alarmEl.innerText = "Stopped music"
+            i++
+            if (min >breakEndMin){
+                i++
+            }
+        }
+        else{
+            alarmEl.style.color = "blue"
+            alarmEl.innerText = "Stopped future alarms"
+            i++
+        }
+        console.log(i)
+    }
+
+   
+</script>
+</html>
